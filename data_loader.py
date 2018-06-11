@@ -14,7 +14,7 @@ class DataLoader(object):
         self._path = path
 
     def __iter__(self):
-        files = os.listdir(self._path)
+        files = self._get_files()
 
         for file in files:
             with open(os.path.join(self._path, file))as f:
@@ -32,11 +32,14 @@ class DataLoader(object):
             }
 
     def __len__(self):
-        return sum(1 for _ in os.listdir(self._path))
+        return len(self._get_files())
 
     @property
     def num_classes(self):
         return len(classes)
+
+    def _get_files(self):
+        return os.listdir(self._path)
 
 
 if __name__ == '__main__':
