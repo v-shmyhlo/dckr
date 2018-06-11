@@ -1,3 +1,6 @@
+import tensorflow as tf
+
+
 def dice_loss(labels, logits, smooth=1, name='dice_loss'):
     with tf.name_scope(name):
         probs = tf.nn.sigmoid(logits)

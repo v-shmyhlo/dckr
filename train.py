@@ -90,14 +90,11 @@ if __name__ == '__main__':
 
     logits, latent = model.model(input['image'], training)
 
+    # very imbalanced classification, requires loss robust to high class imbalance
+    # I use combination of balanced cross entropy and dice loss
     loss = sum([
-        # TODO: cleanup
-        # tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(labels=input['image'], logits=logits)),
-        # tf.reduce_mean(jaccard_loss(labels=input['image'], logits=logits)),
-        # tf.reduce_mean(focal_sigmoid_cross_entropy_with_logits(labels=input['image'], logits=logits)),
         tf.reduce_mean(losses.balanced_sigmoid_cross_entropy_with_logits(labels=input['image'], logits=logits)),
         tf.reduce_mean(losses.dice_loss(labels=input['image'], logits=logits)),
-
         tf.losses.get_regularization_loss()
     ])
 
@@ -166,8 +163,8 @@ if __name__ == '__main__':
             # stop training when no improvement
             m_prev.append(m)
             if len(m_prev) > 1:
-                iou = np.array([m['iou'] for m in m_prev[-5:]])
-                if iou.max() - iou.min() < 0.0005:
+                iou = np.array([m['iou'] for m in m_prev[-3:]])  # compare last 3 epochs
+                if iou.max() - iou.min() < 0.001:
                     print('stopped at iou delta {:.4f}'.format(iou.max() - iou.min()))
                     break
 

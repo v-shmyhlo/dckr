@@ -1,4 +1,5 @@
 import numpy as np
+import tensorflow as tf
 
 
 def points_to_image(points, class_ids, num_classes, size):
