@@ -49,7 +49,7 @@ def model(input, training):
     kernel_initializer = tf.contrib.layers.variance_scaling_initializer(factor=2.0, mode='FAN_IN', uniform=False)
     kernel_regularizer = tf.contrib.layers.l2_regularizer(scale=1e-4)
     num_channels = input.shape[-1]
-    dropout_rate = 0.1
+    dropout_rate = 0.2
 
     # encoder
     input = conv_bn(input, 32)
